@@ -76,14 +76,16 @@ export function Taskbar({
             <span className="text-white font-bold text-sm italic">start</span>
           </button>
 
-          {/* Quick Launch separator */}
-          <div className="w-px h-5 bg-[#1a4ca8] mx-2" />
+          {/* Quick Launch separator - hide on mobile */}
+          {!isMobile && <div className="w-px h-5 bg-[#1a4ca8] mx-2" />}
 
-          {/* Search - XP style */}
-          <button className="h-6 px-2 flex items-center gap-1 rounded bg-white/10 hover:bg-white/20 transition-colors mx-1">
-            <Search className="w-3 h-3 text-white/80" />
-            <span className="text-xs text-white/80 hidden sm:inline">Search</span>
-          </button>
+          {/* Search - XP style - hidden on mobile */}
+          {!isMobile && (
+            <button className="h-6 px-2 flex items-center gap-1 rounded bg-white/10 hover:bg-white/20 transition-colors mx-1">
+              <Search className="w-3 h-3 text-white/80" />
+              <span className="text-xs text-white/80 hidden sm:inline">Search</span>
+            </button>
+          )}
         </div>
 
         {/* Center section - Running apps */}
