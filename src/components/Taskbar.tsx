@@ -39,9 +39,9 @@ export function Taskbar({
         }}
       />
 
-      {/* XP-style Taskbar */}
+      {/* XP-style Taskbar - taller on mobile for better touch targets */}
       <div 
-        className="fixed bottom-0 left-0 right-0 h-[30px] flex items-center justify-between z-[500]"
+        className={`fixed bottom-0 left-0 right-0 ${isMobile ? 'h-[40px]' : 'h-[30px]'} flex items-center justify-between z-[500]`}
         style={{
           background: 'linear-gradient(to bottom, #3168d5 0%, #4993e6 3%, #2157d7 6%, #2663e0 10%, #1941a5 90%, #1941a5 100%)',
           borderTop: '1px solid #0c59b9',
