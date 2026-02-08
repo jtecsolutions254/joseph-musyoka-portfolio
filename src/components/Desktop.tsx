@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { DesktopIcon } from './DesktopIcon';
 import { ContextMenu } from './ContextMenu';
 import { WindowId } from '@/types/window';
+import { useIsMobile } from '@/hooks/use-mobile';
 import xpWallpaper from '@/assets/xp-wallpaper.jpg';
 
 // XP-style SVG icons
