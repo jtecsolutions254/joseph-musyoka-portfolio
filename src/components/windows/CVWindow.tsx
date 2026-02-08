@@ -2,6 +2,8 @@ import { useState, useEffect, useRef } from 'react';
 import { FileText, Download, Upload, Eye, Trash2, Loader2, File, AlertCircle } from 'lucide-react';
 import { useFileUpload } from '@/hooks/useFileUpload';
 import { Button } from '@/components/ui/button';
+import { CVPreviewModal } from '@/components/CVPreviewModal';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface UploadedFile {
   id: string;
@@ -18,8 +20,10 @@ interface UploadedFile {
 export function CVWindow() {
   const [files, setFiles] = useState<UploadedFile[]>([]);
   const [selectedFile, setSelectedFile] = useState<UploadedFile | null>(null);
+  const [previewFile, setPreviewFile] = useState<UploadedFile | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const isMobile = useIsMobile();
   
   const { uploadFile, deleteFile, getFiles, isUploading, uploadProgress, error, clearError } = useFileUpload({
     fileType: 'cv',
@@ -79,8 +83,14 @@ export function CVWindow() {
 
   return (
     <div className="space-y-4 animate-fade-up">
+      {/* CV Preview Modal */}
+      <CVPreviewModal 
+        isOpen={!!previewFile} 
+        onClose={() => setPreviewFile(null)} 
+        file={previewFile}
+      />
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between flex-wrap gap-3">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-destructive to-destructive/60 flex items-center justify-center">
             <FileText className="w-5 h-5 text-destructive-foreground" />
@@ -166,16 +176,16 @@ export function CVWindow() {
                 </div>
                 
                 <div className="flex gap-2 mt-2">
-                  <a
-                    href={file.public_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={(e) => e.stopPropagation()}
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setPreviewFile(file);
+                    }}
                     className="flex-1 flex items-center justify-center gap-1 py-1.5 text-xs bg-secondary rounded hover:bg-secondary/80 transition-colors"
                   >
                     <Eye className="w-3 h-3" />
-                    View
-                  </a>
+                    Preview
+                  </button>
                   <a
                     href={file.public_url}
                     download={file.file_name}

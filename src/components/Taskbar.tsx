@@ -3,6 +3,7 @@ import { Search } from 'lucide-react';
 import { StartMenu } from './StartMenu';
 import { SystemTray } from './SystemTray';
 import { WindowState, WindowId } from '@/types/window';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface TaskbarProps {
   windows: WindowState[];
@@ -24,6 +25,7 @@ export function Taskbar({
   onToggleMute 
 }: TaskbarProps) {
   const [isStartOpen, setIsStartOpen] = useState(false);
+  const isMobile = useIsMobile();
 
   return (
     <>
@@ -37,9 +39,9 @@ export function Taskbar({
         }}
       />
 
-      {/* XP-style Taskbar */}
+      {/* XP-style Taskbar - taller on mobile for better touch targets */}
       <div 
-        className="fixed bottom-0 left-0 right-0 h-[30px] flex items-center justify-between z-[500]"
+        className={`fixed bottom-0 left-0 right-0 ${isMobile ? 'h-[40px]' : 'h-[30px]'} flex items-center justify-between z-[500]`}
         style={{
           background: 'linear-gradient(to bottom, #3168d5 0%, #4993e6 3%, #2157d7 6%, #2663e0 10%, #1941a5 90%, #1941a5 100%)',
           borderTop: '1px solid #0c59b9',
@@ -47,10 +49,10 @@ export function Taskbar({
       >
         {/* Left section - Start button */}
         <div className="flex items-center">
-          {/* XP Start Button */}
+          {/* XP Start Button - larger on mobile */}
           <button
             onClick={() => setIsStartOpen(!isStartOpen)}
-            className={`h-[30px] px-3 flex items-center gap-2 transition-all duration-100 rounded-r-xl ${
+            className={`${isMobile ? 'h-[40px] px-2' : 'h-[30px] px-3'} flex items-center gap-2 transition-all duration-100 rounded-r-xl ${
               isStartOpen 
                 ? 'bg-[#2a5298]' 
                 : 'hover:brightness-110'
@@ -74,23 +76,25 @@ export function Taskbar({
             <span className="text-white font-bold text-sm italic">start</span>
           </button>
 
-          {/* Quick Launch separator */}
-          <div className="w-px h-5 bg-[#1a4ca8] mx-2" />
+          {/* Quick Launch separator - hide on mobile */}
+          {!isMobile && <div className="w-px h-5 bg-[#1a4ca8] mx-2" />}
 
-          {/* Search - XP style */}
-          <button className="h-6 px-2 flex items-center gap-1 rounded bg-white/10 hover:bg-white/20 transition-colors mx-1">
-            <Search className="w-3 h-3 text-white/80" />
-            <span className="text-xs text-white/80 hidden sm:inline">Search</span>
-          </button>
+          {/* Search - XP style - hidden on mobile */}
+          {!isMobile && (
+            <button className="h-6 px-2 flex items-center gap-1 rounded bg-white/10 hover:bg-white/20 transition-colors mx-1">
+              <Search className="w-3 h-3 text-white/80" />
+              <span className="text-xs text-white/80 hidden sm:inline">Search</span>
+            </button>
+          )}
         </div>
 
-        {/* Center section - Running apps */}
-        <div className="flex-1 flex items-center gap-0.5 px-2">
+        {/* Center section - Running apps - scrollable on mobile */}
+        <div className={`flex-1 flex items-center gap-0.5 px-1 md:px-2 overflow-x-auto ${isMobile ? 'max-w-[50vw]' : ''}`}>
           {windows.map((window) => (
             <button
               key={window.id}
               onClick={() => onWindowClick(window.id)}
-              className={`h-[24px] px-2 flex items-center gap-1.5 transition-all duration-100 min-w-[120px] max-w-[160px] text-left`}
+              className={`${isMobile ? 'h-[32px] min-w-[80px] max-w-[100px]' : 'h-[24px] min-w-[120px] max-w-[160px]'} px-2 flex items-center gap-1.5 transition-all duration-100 text-left shrink-0`}
               style={{
                 background: !window.isMinimized
                   ? 'linear-gradient(to bottom, #3a82f7 0%, #2d6ddb 50%, #2c60c5 51%, #2455b5 100%)'
