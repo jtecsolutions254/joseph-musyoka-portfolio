@@ -83,7 +83,12 @@ export function CVWindow() {
 
   return (
     <div className="space-y-4 animate-fade-up">
-      {/* Header */}
+      {/* CV Preview Modal */}
+      <CVPreviewModal 
+        isOpen={!!previewFile} 
+        onClose={() => setPreviewFile(null)} 
+        file={previewFile}
+      />
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-destructive to-destructive/60 flex items-center justify-center">
