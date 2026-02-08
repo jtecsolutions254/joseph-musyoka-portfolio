@@ -90,6 +90,7 @@ export function CVWindow() {
         file={previewFile}
       />
       {/* Header */}
+      <div className="flex items-center justify-between flex-wrap gap-3">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-destructive to-destructive/60 flex items-center justify-center">
             <FileText className="w-5 h-5 text-destructive-foreground" />
