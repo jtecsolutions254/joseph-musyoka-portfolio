@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { Minus, Square, X, Copy } from 'lucide-react';
 import { WindowState } from '@/types/window';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface WindowProps {
   window: WindowState;
