@@ -88,8 +88,8 @@ export function Taskbar({
           )}
         </div>
 
-        {/* Center section - Running apps */}
-        <div className="flex-1 flex items-center gap-0.5 px-2">
+        {/* Center section - Running apps - scrollable on mobile */}
+        <div className={`flex-1 flex items-center gap-0.5 px-1 md:px-2 overflow-x-auto ${isMobile ? 'max-w-[50vw]' : ''}`}>
           {windows.map((window) => (
             <button
               key={window.id}
