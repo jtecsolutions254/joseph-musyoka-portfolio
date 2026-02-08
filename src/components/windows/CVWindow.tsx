@@ -176,16 +176,16 @@ export function CVWindow() {
                 </div>
                 
                 <div className="flex gap-2 mt-2">
-                  <a
-                    href={file.public_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={(e) => e.stopPropagation()}
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setPreviewFile(file);
+                    }}
                     className="flex-1 flex items-center justify-center gap-1 py-1.5 text-xs bg-secondary rounded hover:bg-secondary/80 transition-colors"
                   >
                     <Eye className="w-3 h-3" />
-                    View
-                  </a>
+                    Preview
+                  </button>
                   <a
                     href={file.public_url}
                     download={file.file_name}
