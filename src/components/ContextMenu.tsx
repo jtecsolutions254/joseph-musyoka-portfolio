@@ -99,7 +99,7 @@ export function ContextMenu({ x, y, onClose, onRefresh, onToggleTheme }: Context
     },
     { label: '', icon: null, divider: true },
     {
-      label: 'About this portfolio',
+      label: 'Properties',
       icon: <Info className="w-4 h-4" />,
       onClick: onClose
     },
@@ -108,24 +108,43 @@ export function ContextMenu({ x, y, onClose, onRefresh, onToggleTheme }: Context
   return (
     <div
       ref={menuRef}
-      className="fixed z-[10000] w-56 glass-panel-strong rounded-lg py-1.5 animate-scale-in shadow-2xl"
-      style={{ left: adjustedX, top: adjustedY }}
+      className="fixed z-[10000] w-52 py-0.5 animate-scale-in"
+      style={{ 
+        left: adjustedX, 
+        top: adjustedY,
+        background: '#f5f5f5',
+        border: '1px solid #888',
+        boxShadow: '2px 2px 5px rgba(0,0,0,0.3)',
+      }}
     >
       {menuItems.map((item, index) => (
         item.divider ? (
-          <div key={index} className="h-px bg-border/50 my-1.5 mx-3" />
+          <div 
+            key={index} 
+            className="h-px mx-1 my-0.5"
+            style={{ background: '#c0c0c0' }}
+          />
         ) : (
           <button
             key={index}
             onClick={item.onClick}
-            className="w-full px-3 py-2 flex items-center gap-3 text-sm text-foreground hover:bg-primary/10 transition-colors text-left group"
+            className="w-full px-6 py-1 flex items-center gap-3 text-[13px] transition-colors text-left group"
+            style={{ color: '#000' }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = '#316ac5';
+              e.currentTarget.style.color = '#fff';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = 'transparent';
+              e.currentTarget.style.color = '#000';
+            }}
           >
-            <span className="text-muted-foreground group-hover:text-primary transition-colors">
+            <span className="w-4 h-4 flex items-center justify-center">
               {item.icon}
             </span>
-            <span>{item.label}</span>
+            <span className="flex-1">{item.label}</span>
             {item.submenu && (
-              <span className="ml-auto text-muted-foreground">›</span>
+              <span className="text-xs">▶</span>
             )}
           </button>
         )
