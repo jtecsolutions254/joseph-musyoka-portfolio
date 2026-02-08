@@ -1,5 +1,6 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import { BootScreen } from '@/components/BootScreen';
+import { LoginScreen } from '@/components/LoginScreen';
 import { Desktop } from '@/components/Desktop';
 import { Taskbar } from '@/components/Taskbar';
 import { Window } from '@/components/Window';
@@ -9,6 +10,9 @@ import { ProjectsWindow } from '@/components/windows/ProjectsWindow';
 import { ExperienceWindow } from '@/components/windows/ExperienceWindow';
 import { ContactWindow } from '@/components/windows/ContactWindow';
 import { CVWindow } from '@/components/windows/CVWindow';
+import { PaintApp } from '@/components/apps/PaintApp';
+import { FileExplorerApp } from '@/components/apps/FileExplorerApp';
+import { MediaViewerApp } from '@/components/apps/MediaViewerApp';
 import { useWindowManager } from '@/hooks/useWindowManager';
 import { useSound } from '@/hooks/useSound';
 import { WindowId } from '@/types/window';
@@ -20,11 +24,18 @@ const windowContents: Record<WindowId, React.ReactNode> = {
   experience: <ExperienceWindow />,
   contact: <ContactWindow />,
   cv: <CVWindow />,
+  paint: <PaintApp />,
+  explorer: <FileExplorerApp />,
+  photos: <MediaViewerApp />,
 };
 
+type AppPhase = 'boot' | 'login' | 'desktop';
+
 export default function Index() {
-  const [isBooting, setIsBooting] = useState(true);
-  const [hasBooted, setHasBooted] = useState(false);
+  const [phase, setPhase] = useState<AppPhase>('boot');
+  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [isMuted, setIsMuted] = useState(false);
+  
   const { playStartupSound, playClickSound, playOpenSound, playCloseSound } = useSound();
   
   const {
@@ -39,63 +50,77 @@ export default function Index() {
   } = useWindowManager();
 
   const handleBootComplete = useCallback(() => {
-    setIsBooting(false);
-    setHasBooted(true);
-    // Play startup sound after a brief delay
+    setPhase('login');
+  }, []);
+
+  const handleLogin = useCallback(() => {
+    setPhase('desktop');
+    // Play startup sound after login
     setTimeout(() => {
-      playStartupSound();
-    }, 200);
-  }, [playStartupSound]);
+      if (!isMuted) {
+        playStartupSound();
+      }
+    }, 300);
+  }, [playStartupSound, isMuted]);
 
   const handleOpenWindow = useCallback((id: WindowId) => {
-    playOpenSound();
+    if (!isMuted) playOpenSound();
     openWindow(id);
-  }, [openWindow, playOpenSound]);
+  }, [openWindow, playOpenSound, isMuted]);
 
   const handleCloseWindow = useCallback((id: string) => {
-    playCloseSound();
+    if (!isMuted) playCloseSound();
     closeWindow(id);
-  }, [closeWindow, playCloseSound]);
+  }, [closeWindow, playCloseSound, isMuted]);
 
   const handleIconClick = useCallback(() => {
-    playClickSound();
-  }, [playClickSound]);
+    if (!isMuted) playClickSound();
+  }, [playClickSound, isMuted]);
 
   const handleTaskbarWindowClick = useCallback((id: string) => {
-    playClickSound();
+    if (!isMuted) playClickSound();
     const window = windows.find(w => w.id === id);
     if (window?.isMinimized) {
+      // Unminimize and focus
       focusWindow(id);
-      minimizeWindow(id); // Toggle minimized state
+      minimizeWindow(id);
     } else {
       focusWindow(id);
     }
-  }, [windows, focusWindow, minimizeWindow, playClickSound]);
+  }, [windows, focusWindow, minimizeWindow, playClickSound, isMuted]);
 
-  // Prevent context menu on desktop (more Windows-like)
-  useEffect(() => {
-    const handleContextMenu = (e: MouseEvent) => {
-      // Allow context menu on form inputs
-      if ((e.target as HTMLElement).closest('input, textarea')) return;
-      e.preventDefault();
-    };
-    
-    document.addEventListener('contextmenu', handleContextMenu);
-    return () => document.removeEventListener('contextmenu', handleContextMenu);
+  const toggleTheme = useCallback(() => {
+    setIsDarkMode(prev => {
+      const next = !prev;
+      if (next) {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+      return next;
+    });
+  }, []);
+
+  const toggleMute = useCallback(() => {
+    setIsMuted(prev => !prev);
   }, []);
 
   return (
     <div className="h-screen w-screen overflow-hidden select-none">
       {/* Boot Screen */}
-      {isBooting && <BootScreen onComplete={handleBootComplete} />}
+      {phase === 'boot' && <BootScreen onComplete={handleBootComplete} />}
+
+      {/* Login Screen */}
+      {phase === 'login' && <LoginScreen onLogin={handleLogin} />}
 
       {/* Desktop Environment */}
-      {hasBooted && (
+      {phase === 'desktop' && (
         <>
           {/* Desktop Background & Icons */}
           <Desktop 
             onOpenWindow={handleOpenWindow}
             onIconClick={handleIconClick}
+            onToggleTheme={toggleTheme}
           />
 
           {/* Windows */}
@@ -118,6 +143,10 @@ export default function Index() {
             windows={getTaskbarWindows()}
             onWindowClick={handleTaskbarWindowClick}
             onOpenWindow={handleOpenWindow}
+            isDarkMode={isDarkMode}
+            onToggleTheme={toggleTheme}
+            isMuted={isMuted}
+            onToggleMute={toggleMute}
           />
         </>
       )}
