@@ -114,11 +114,11 @@ export function Window({
           <span className="text-[13px] font-bold text-white drop-shadow-sm truncate">{window.title}</span>
         </div>
 
-        <div className="window-controls flex gap-0.5">
-          {/* XP Minimize button */}
+        <div className="window-controls flex gap-1 shrink-0">
+          {/* XP Minimize button - larger touch targets on mobile */}
           <button
             onClick={onMinimize}
-            className="w-[21px] h-[21px] flex items-center justify-center rounded-sm transition-all"
+            className={`${isMobile ? 'w-[32px] h-[32px]' : 'w-[21px] h-[21px]'} flex items-center justify-center rounded-sm transition-all`}
             style={{
               background: 'linear-gradient(180deg, #3c8dfa 0%, #1c6ae4 50%, #1865dc 51%, #1761d8 100%)',
               border: '1px solid #0f419b',
