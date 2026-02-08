@@ -25,6 +25,7 @@ export function Taskbar({
   onToggleMute 
 }: TaskbarProps) {
   const [isStartOpen, setIsStartOpen] = useState(false);
+  const isMobile = useIsMobile();
 
   return (
     <>
