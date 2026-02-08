@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
-import { User, ArrowRight, Eye, EyeOff } from 'lucide-react';
+import { ArrowRight, Eye, EyeOff } from 'lucide-react';
 import { Input } from '@/components/ui/input';
+import xpWallpaper from '@/assets/xp-wallpaper.jpg';
 
 interface LoginScreenProps {
   onLogin: () => void;
@@ -10,16 +11,9 @@ export function LoginScreen({ onLogin }: LoginScreenProps) {
   const [showPassword, setShowPassword] = useState(false);
   const [password, setPassword] = useState('');
   const [isLoggingIn, setIsLoggingIn] = useState(false);
-  const [currentTime, setCurrentTime] = useState(new Date());
-
-  useEffect(() => {
-    const timer = setInterval(() => setCurrentTime(new Date()), 1000);
-    return () => clearInterval(timer);
-  }, []);
 
   const handleLogin = () => {
     setIsLoggingIn(true);
-    // Simulate login animation
     setTimeout(() => {
       onLogin();
     }, 1500);
@@ -31,115 +25,121 @@ export function LoginScreen({ onLogin }: LoginScreenProps) {
     }
   };
 
-  const formatTime = (date: Date) => {
-    return date.toLocaleTimeString('en-US', { 
-      hour: 'numeric', 
-      minute: '2-digit',
-      hour12: true 
-    });
-  };
-
-  const formatDate = (date: Date) => {
-    return date.toLocaleDateString('en-US', { 
-      weekday: 'long',
-      month: 'long',
-      day: 'numeric'
-    });
-  };
-
   return (
     <div 
       className={`fixed inset-0 z-[9998] transition-all duration-700 ${
         isLoggingIn ? 'opacity-0 scale-110' : 'opacity-100 scale-100'
       }`}
     >
-      {/* Background with blur effect */}
+      {/* XP Welcome Screen Background */}
       <div 
-        className="absolute inset-0 bg-cover bg-center"
+        className="absolute inset-0"
         style={{
-          backgroundImage: 'linear-gradient(135deg, hsl(206 100% 35%) 0%, hsl(220 60% 20%) 50%, hsl(280 60% 25%) 100%)'
+          background: 'linear-gradient(135deg, #245edc 0%, #1a4eb8 30%, #4c7fe0 50%, #1a4eb8 70%, #245edc 100%)',
         }}
       />
-      <div className="absolute inset-0 backdrop-blur-sm bg-background/10" />
 
-      {/* Lock screen content */}
-      <div className="relative h-full flex flex-col items-center justify-center text-primary-foreground">
-        {/* Time and Date - Top Center */}
-        <div className="absolute top-16 left-1/2 -translate-x-1/2 text-center animate-fade-up">
-          <div className="text-7xl md:text-8xl font-light tracking-tight drop-shadow-lg">
-            {formatTime(currentTime)}
-          </div>
-          <div className="text-xl md:text-2xl font-light mt-2 opacity-90 drop-shadow-md">
-            {formatDate(currentTime)}
-          </div>
+      {/* Top gradient bar */}
+      <div 
+        className="absolute top-0 left-0 right-0 h-[60px]"
+        style={{
+          background: 'linear-gradient(to bottom, #3166d1 0%, #4183e0 50%, #245cc8 100%)',
+          borderBottom: '2px solid #1a4eb8',
+        }}
+      />
+
+      {/* "Windows XP" branding */}
+      <div className="absolute top-4 left-6 flex items-center gap-3">
+        <svg width="40" height="40" viewBox="0 0 100 100" className="drop-shadow-lg">
+          <path d="M5 10 L45 15 L45 45 L5 45 Z" fill="#F25022" />
+          <path d="M50 15 L95 10 L95 45 L50 45 Z" fill="#7FBA00" />
+          <path d="M5 50 L45 50 L45 85 L5 90 Z" fill="#00A4EF" />
+          <path d="M50 50 L95 50 L95 90 L50 85 Z" fill="#FFB900" />
+        </svg>
+        <div>
+          <span className="text-white text-2xl font-light tracking-tight">Windows</span>
+          <span className="text-white text-2xl font-bold italic ml-1">XP</span>
         </div>
+      </div>
 
-        {/* User Profile */}
-        <div className="flex flex-col items-center animate-scale-in">
-          {/* Profile Picture */}
-          <div className="w-32 h-32 md:w-40 md:h-40 rounded-full bg-gradient-to-br from-primary/80 to-primary/40 flex items-center justify-center mb-6 shadow-2xl border-4 border-primary-foreground/20 backdrop-blur-sm">
-            <span className="text-5xl md:text-6xl font-semibold text-primary-foreground">KJ</span>
-          </div>
-
-          {/* Name */}
-          <h1 className="text-2xl md:text-3xl font-medium mb-8 drop-shadow-lg">
-            Kiseko Joseph Musyoka
-          </h1>
-
-          {/* Password Input */}
-          <div className="relative w-72 md:w-80 group">
-            <div className="absolute inset-0 bg-primary-foreground/20 rounded-full backdrop-blur-xl border border-primary-foreground/30" />
-            <Input
-              type={showPassword ? 'text' : 'password'}
-              placeholder="Password (just press enter)"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              onKeyDown={handleKeyDown}
-              className="relative w-full h-12 bg-transparent border-0 text-primary-foreground placeholder:text-primary-foreground/50 pr-20 pl-5 rounded-full focus-visible:ring-2 focus-visible:ring-primary-foreground/50 focus-visible:ring-offset-0"
-              autoFocus
-            />
-            <div className="absolute right-1 top-1/2 -translate-y-1/2 flex gap-1">
-              <button
-                onClick={() => setShowPassword(!showPassword)}
-                className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-primary-foreground/20 transition-colors"
-              >
-                {showPassword ? (
-                  <EyeOff className="w-5 h-5 text-primary-foreground/70" />
-                ) : (
-                  <Eye className="w-5 h-5 text-primary-foreground/70" />
-                )}
-              </button>
-              <button
-                onClick={handleLogin}
-                className="w-10 h-10 flex items-center justify-center rounded-full bg-primary-foreground/20 hover:bg-primary-foreground/30 transition-colors"
-              >
-                <ArrowRight className="w-5 h-5 text-primary-foreground" />
-              </button>
+      {/* Main Login Panel */}
+      <div className="absolute left-0 right-0 top-1/2 -translate-y-1/2 flex items-center justify-center">
+        <div 
+          className="w-[320px] rounded-lg overflow-hidden"
+          style={{
+            background: 'linear-gradient(180deg, #6f9fdc 0%, #5588cc 2%, #3b6eb8 98%, #2a5aa0 100%)',
+            border: '2px solid #1a4488',
+            boxShadow: '0 4px 20px rgba(0,0,0,0.3)',
+          }}
+        >
+          {/* User info section */}
+          <div className="p-4 flex items-center gap-4 border-b border-[#1a4488]/50">
+            {/* User avatar */}
+            <div 
+              className="w-16 h-16 rounded border-2 border-white/50 flex items-center justify-center text-white font-bold text-xl"
+              style={{
+                background: 'linear-gradient(135deg, #4a90d9 0%, #2157d7 100%)',
+              }}
+            >
+              KJM
+            </div>
+            <div className="flex-1">
+              <h2 className="text-white font-bold text-lg drop-shadow">Kiseko Joseph</h2>
+              <p className="text-white/80 text-xs">Computer Science Portfolio</p>
             </div>
           </div>
 
-          {/* Sign-in options */}
-          <div className="mt-6 flex flex-col items-center gap-2">
-            <button className="text-sm text-primary-foreground/70 hover:text-primary-foreground transition-colors">
-              Sign-in options
-            </button>
+          {/* Password section */}
+          <div className="p-4">
+            <label className="text-white text-xs font-medium mb-2 block">
+              Type your password (or just press Enter):
+            </label>
+            <div className="flex gap-2">
+              <div className="flex-1 relative">
+                <Input
+                  type={showPassword ? 'text' : 'password'}
+                  placeholder=""
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  onKeyDown={handleKeyDown}
+                  className="h-8 bg-white border-0 text-black text-sm rounded-sm pr-8"
+                  autoFocus
+                />
+                <button
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-1 top-1/2 -translate-y-1/2 w-6 h-6 flex items-center justify-center text-gray-500 hover:text-gray-700"
+                >
+                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                </button>
+              </div>
+              <button
+                onClick={handleLogin}
+                className="w-8 h-8 flex items-center justify-center rounded-sm transition-all"
+                style={{
+                  background: 'linear-gradient(180deg, #5ebe5e 0%, #3d9f3d 50%, #2d8f2d 51%, #1d7f1d 100%)',
+                  border: '1px solid #1a6f1a',
+                }}
+              >
+                <ArrowRight className="w-4 h-4 text-white" />
+              </button>
+            </div>
           </div>
         </div>
+      </div>
 
-        {/* Bottom info */}
-        <div className="absolute bottom-8 left-0 right-0 flex justify-between items-end px-8">
-          {/* Network/Accessibility icons */}
-          <div className="flex gap-4">
-            <button className="w-10 h-10 rounded-full bg-primary-foreground/10 hover:bg-primary-foreground/20 flex items-center justify-center transition-colors backdrop-blur-sm">
-              <User className="w-5 h-5 text-primary-foreground/80" />
-            </button>
-          </div>
-
-          {/* Power/Accessibility */}
-          <div className="text-right">
-            <p className="text-xs text-primary-foreground/50">Computer Science Portfolio</p>
-            <p className="text-xs text-primary-foreground/50">University of Embu</p>
-          </div>
+      {/* Bottom bar */}
+      <div 
+        className="absolute bottom-0 left-0 right-0 h-[50px] flex items-center justify-between px-6"
+        style={{
+          background: 'linear-gradient(to top, #2a5298 0%, #3b6eb8 100%)',
+          borderTop: '2px solid #1a4488',
+        }}
+      >
+        <div className="text-white/70 text-xs">
+          Welcome to the portfolio
+        </div>
+        <div className="text-white/70 text-xs">
+          After logging in, double-click icons to explore
         </div>
       </div>
     </div>
