@@ -128,6 +128,7 @@ const desktopIcons: { id: WindowId; title: string; icon: React.ReactNode }[] = [
 export function Desktop({ onOpenWindow, onIconClick, onToggleTheme }: DesktopProps) {
   const [contextMenu, setContextMenu] = useState<{ x: number; y: number } | null>(null);
   const [showWelcome, setShowWelcome] = useState(true);
+  const isMobile = useIsMobile();
 
   const handleContextMenu = (e: React.MouseEvent) => {
     e.preventDefault();
