@@ -84,8 +84,8 @@ export function LoginScreen({ onLogin }: LoginScreenProps) {
               KJM
             </div>
             <div className="flex-1">
-              <h2 className="text-white font-bold text-lg drop-shadow">Kiseko Joseph</h2>
-              <p className="text-white/80 text-xs">Computer Science Portfolio</p>
+              <h2 className="text-white font-bold text-lg drop-shadow">Joseph Musyoka</h2>
+              <p className="text-white/80 text-xs">Professional Portfolio</p>
             </div>
           </div>
 

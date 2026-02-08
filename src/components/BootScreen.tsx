@@ -132,7 +132,7 @@ export function BootScreen({ onComplete }: BootScreenProps) {
       {/* Loading text with dots */}
       {phase === 'loading' && (
         <div className="text-white/60 text-sm animate-fade-in">
-          <span>Starting Windows{loadingDots}</span>
+          <span>OPENING PORTFOLIO{loadingDots}</span>
         </div>
       )}
 
