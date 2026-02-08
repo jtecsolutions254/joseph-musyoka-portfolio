@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Search } from 'lucide-react';
+import { useState, useRef, useEffect } from 'react';
+import { Search, X } from 'lucide-react';
 import { StartMenu } from './StartMenu';
 import { SystemTray } from './SystemTray';
 import { WindowState, WindowId } from '@/types/window';
