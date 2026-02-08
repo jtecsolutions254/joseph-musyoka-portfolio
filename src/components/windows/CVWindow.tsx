@@ -17,8 +17,8 @@ export function CVWindow() {
       <div className="grid md:grid-cols-2 gap-4">
         <div className="glass-panel rounded-xl p-5 hover:shadow-xl transition-shadow">
           <div className="flex items-start justify-between mb-4">
-            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center">
-              <FileText className="w-6 h-6 text-white" />
+            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center">
+              <FileText className="w-6 h-6 text-primary-foreground" />
             </div>
             <span className="text-xs text-muted-foreground bg-secondary px-2 py-1 rounded-full">
               PDF
