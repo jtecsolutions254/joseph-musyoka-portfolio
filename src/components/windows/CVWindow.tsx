@@ -2,6 +2,8 @@ import { useState, useEffect, useRef } from 'react';
 import { FileText, Download, Upload, Eye, Trash2, Loader2, File, AlertCircle } from 'lucide-react';
 import { useFileUpload } from '@/hooks/useFileUpload';
 import { Button } from '@/components/ui/button';
+import { CVPreviewModal } from '@/components/CVPreviewModal';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface UploadedFile {
   id: string;
@@ -18,8 +20,10 @@ interface UploadedFile {
 export function CVWindow() {
   const [files, setFiles] = useState<UploadedFile[]>([]);
   const [selectedFile, setSelectedFile] = useState<UploadedFile | null>(null);
+  const [previewFile, setPreviewFile] = useState<UploadedFile | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const isMobile = useIsMobile();
   
   const { uploadFile, deleteFile, getFiles, isUploading, uploadProgress, error, clearError } = useFileUpload({
     fileType: 'cv',
