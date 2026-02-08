@@ -16,4 +16,13 @@ export interface DesktopIcon {
   icon: string;
 }
 
-export type WindowId = 'about' | 'skills' | 'projects' | 'experience' | 'contact' | 'cv';
+export type WindowId = 
+  | 'about' 
+  | 'skills' 
+  | 'projects' 
+  | 'experience' 
+  | 'contact' 
+  | 'cv'
+  | 'paint'
+  | 'explorer'
+  | 'photos';

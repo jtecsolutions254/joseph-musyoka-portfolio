@@ -44,6 +44,27 @@ const defaultWindows: Record<WindowId, Omit<WindowState, 'zIndex' | 'isOpen' | '
     position: { x: 140, y: 100 },
     size: { width: 550, height: 500 },
   },
+  paint: {
+    id: 'paint',
+    title: 'Paint',
+    icon: '🎨',
+    position: { x: 80, y: 40 },
+    size: { width: 700, height: 500 },
+  },
+  explorer: {
+    id: 'explorer',
+    title: 'File Explorer',
+    icon: '📂',
+    position: { x: 120, y: 60 },
+    size: { width: 800, height: 550 },
+  },
+  photos: {
+    id: 'photos',
+    title: 'Photos',
+    icon: '🖼️',
+    position: { x: 100, y: 50 },
+    size: { width: 750, height: 550 },
+  },
 };
 
 export function useWindowManager() {
