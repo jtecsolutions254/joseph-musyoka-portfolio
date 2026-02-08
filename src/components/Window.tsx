@@ -132,31 +132,33 @@ export function Window({
               e.currentTarget.style.background = 'linear-gradient(180deg, #3c8dfa 0%, #1c6ae4 50%, #1865dc 51%, #1761d8 100%)';
             }}
           >
-            <Minus className="w-3 h-3 text-white drop-shadow-sm" />
+            <Minus className={`${isMobile ? 'w-4 h-4' : 'w-3 h-3'} text-white drop-shadow-sm`} />
           </button>
-          {/* XP Maximize button */}
-          <button
-            onClick={onMaximize}
-            className="w-[21px] h-[21px] flex items-center justify-center rounded-sm transition-all"
-            style={{
-              background: 'linear-gradient(180deg, #3c8dfa 0%, #1c6ae4 50%, #1865dc 51%, #1761d8 100%)',
-              border: '1px solid #0f419b',
-              boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.4)',
-            }}
-            title={window.isMaximized ? 'Restore' : 'Maximize'}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.background = 'linear-gradient(180deg, #5ca7ff 0%, #3c8dfa 50%, #2c7df0 51%, #2679ec 100%)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.background = 'linear-gradient(180deg, #3c8dfa 0%, #1c6ae4 50%, #1865dc 51%, #1761d8 100%)';
-            }}
-          >
-            {window.isMaximized ? (
-              <Copy className="w-2.5 h-2.5 text-white drop-shadow-sm" />
-            ) : (
-              <Square className="w-2.5 h-2.5 text-white drop-shadow-sm" />
-            )}
-          </button>
+          {/* XP Maximize button - hidden on mobile since always maximized */}
+          {!isMobile && (
+            <button
+              onClick={onMaximize}
+              className="w-[21px] h-[21px] flex items-center justify-center rounded-sm transition-all"
+              style={{
+                background: 'linear-gradient(180deg, #3c8dfa 0%, #1c6ae4 50%, #1865dc 51%, #1761d8 100%)',
+                border: '1px solid #0f419b',
+                boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.4)',
+              }}
+              title={window.isMaximized ? 'Restore' : 'Maximize'}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = 'linear-gradient(180deg, #5ca7ff 0%, #3c8dfa 50%, #2c7df0 51%, #2679ec 100%)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = 'linear-gradient(180deg, #3c8dfa 0%, #1c6ae4 50%, #1865dc 51%, #1761d8 100%)';
+              }}
+            >
+              {window.isMaximized ? (
+                <Copy className="w-2.5 h-2.5 text-white drop-shadow-sm" />
+              ) : (
+                <Square className="w-2.5 h-2.5 text-white drop-shadow-sm" />
+              )}
+            </button>
+          )}
           {/* XP Close button - Red */}
           <button
             onClick={onClose}
