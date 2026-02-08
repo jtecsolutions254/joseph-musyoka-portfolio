@@ -7,22 +7,19 @@ interface DesktopProps {
   onIconClick: () => void;
 }
 
-const desktopIcons: { id: WindowId; title: string; icon: React.ReactNode }[] = [
-  { id: 'about', title: 'About Me', icon: <User className="w-8 h-8 text-blue-500" /> },
-  { id: 'skills', title: 'Skills', icon: <Code className="w-8 h-8 text-green-500" /> },
-  { id: 'projects', title: 'Projects', icon: <FolderOpen className="w-8 h-8 text-yellow-500" /> },
-  { id: 'experience', title: 'Experience', icon: <Briefcase className="w-8 h-8 text-purple-500" /> },
-  { id: 'contact', title: 'Contact', icon: <Mail className="w-8 h-8 text-red-500" /> },
-  { id: 'cv', title: 'CV / Letter', icon: <FileText className="w-8 h-8 text-cyan-500" /> },
+const desktopIcons: { id: WindowId; title: string; icon: React.ReactNode; colorClass: string }[] = [
+  { id: 'about', title: 'About Me', icon: <User className="w-8 h-8" />, colorClass: 'text-primary' },
+  { id: 'skills', title: 'Skills', icon: <Code className="w-8 h-8" />, colorClass: 'text-primary' },
+  { id: 'projects', title: 'Projects', icon: <FolderOpen className="w-8 h-8" />, colorClass: 'text-primary' },
+  { id: 'experience', title: 'Experience', icon: <Briefcase className="w-8 h-8" />, colorClass: 'text-primary' },
+  { id: 'contact', title: 'Contact', icon: <Mail className="w-8 h-8" />, colorClass: 'text-primary' },
+  { id: 'cv', title: 'CV / Letter', icon: <FileText className="w-8 h-8" />, colorClass: 'text-primary' },
 ];
 
 export function Desktop({ onOpenWindow, onIconClick }: DesktopProps) {
   return (
     <div 
-      className="absolute inset-0 p-6 pb-16 overflow-hidden"
-      style={{
-        background: 'linear-gradient(135deg, hsl(210 40% 96%) 0%, hsl(210 40% 88%) 50%, hsl(206 100% 85%) 100%)',
-      }}
+      className="absolute inset-0 p-6 pb-16 overflow-hidden bg-gradient-to-br from-[hsl(var(--desktop-bg))] via-background to-primary/10"
     >
       {/* Desktop Icons Grid */}
       <div className="grid grid-cols-1 gap-2 w-fit">
@@ -31,7 +28,7 @@ export function Desktop({ onOpenWindow, onIconClick }: DesktopProps) {
             key={icon.id}
             id={icon.id}
             title={icon.title}
-            icon={icon.icon}
+            icon={<div className={icon.colorClass}>{icon.icon}</div>}
             onClick={onIconClick}
             onDoubleClick={() => onOpenWindow(icon.id)}
           />

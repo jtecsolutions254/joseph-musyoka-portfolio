@@ -51,9 +51,9 @@ const typeIcons: Record<string, React.ReactNode> = {
 };
 
 const typeColors: Record<string, string> = {
-  academic: 'from-blue-500 to-blue-600',
-  project: 'from-green-500 to-green-600',
-  volunteer: 'from-purple-500 to-purple-600',
+  academic: 'from-primary to-primary/80',
+  project: 'from-primary/80 to-primary/60',
+  volunteer: 'from-accent to-accent/80',
 };
 
 export function ExperienceWindow() {

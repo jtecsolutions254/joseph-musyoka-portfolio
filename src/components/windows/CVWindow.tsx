@@ -42,8 +42,8 @@ export function CVWindow() {
 
         <div className="glass-panel rounded-xl p-5 hover:shadow-xl transition-shadow">
           <div className="flex items-start justify-between mb-4">
-            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-green-500 to-green-600 flex items-center justify-center">
-              <Briefcase className="w-6 h-6 text-white" />
+            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary/80 to-primary/60 flex items-center justify-center">
+              <Briefcase className="w-6 h-6 text-primary-foreground" />
             </div>
             <span className="text-xs text-muted-foreground bg-secondary px-2 py-1 rounded-full">
               PDF
