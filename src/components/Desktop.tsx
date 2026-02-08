@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { DesktopIcon } from './DesktopIcon';
 import { ContextMenu } from './ContextMenu';
 import { WindowId } from '@/types/window';
+import { useIsMobile } from '@/hooks/use-mobile';
 import xpWallpaper from '@/assets/xp-wallpaper.jpg';
 
 // XP-style SVG icons
@@ -127,6 +128,7 @@ const desktopIcons: { id: WindowId; title: string; icon: React.ReactNode }[] = [
 export function Desktop({ onOpenWindow, onIconClick, onToggleTheme }: DesktopProps) {
   const [contextMenu, setContextMenu] = useState<{ x: number; y: number } | null>(null);
   const [showWelcome, setShowWelcome] = useState(true);
+  const isMobile = useIsMobile();
 
   const handleContextMenu = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -140,17 +142,18 @@ export function Desktop({ onOpenWindow, onIconClick, onToggleTheme }: DesktopPro
 
   return (
     <div 
-      className="absolute inset-0 p-4 pb-16 overflow-hidden"
+      className="absolute inset-0 p-2 md:p-4 pb-12 md:pb-16 overflow-auto touch-pan-y overscroll-contain"
       style={{
         backgroundImage: `url(${xpWallpaper})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
+        backgroundAttachment: isMobile ? 'scroll' : 'fixed',
       }}
       onContextMenu={handleContextMenu}
       onClick={() => setContextMenu(null)}
     >
-      {/* Desktop Icons Grid - XP style layout */}
-      <div className="grid grid-cols-1 gap-1 w-fit">
+      {/* Desktop Icons Grid - responsive layout */}
+      <div className={`grid gap-1 w-fit ${isMobile ? 'grid-cols-3 sm:grid-cols-4' : 'grid-cols-1'}`}>
         {desktopIcons.map((icon) => (
           <DesktopIcon
             key={icon.id}
@@ -159,6 +162,7 @@ export function Desktop({ onOpenWindow, onIconClick, onToggleTheme }: DesktopPro
             icon={icon.icon}
             onClick={onIconClick}
             onDoubleClick={() => onOpenWindow(icon.id)}
+            isMobile={isMobile}
           />
         ))}
       </div>

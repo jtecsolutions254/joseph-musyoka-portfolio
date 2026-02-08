@@ -100,11 +100,11 @@ export function BootScreen({ onComplete }: BootScreenProps) {
           </svg>
         </div>
         
-        {/* Windows XP Text */}
+        {/* JMK Portfolio Text */}
         <div className="text-center mb-8">
           <div className="flex items-center justify-center gap-2">
-            <span className="text-white text-3xl font-light tracking-wider">Windows</span>
-            <span className="text-white text-3xl font-bold italic text-[#F25022]">XP</span>
+            <span className="text-white text-3xl font-light tracking-wider">JMK</span>
+            <span className="text-white text-3xl font-bold italic text-[#F25022]">Portfolio</span>
           </div>
           <span className="text-white/60 text-sm tracking-[0.3em] uppercase mt-1 block">Professional</span>
         </div>
@@ -132,7 +132,7 @@ export function BootScreen({ onComplete }: BootScreenProps) {
       {/* Loading text with dots */}
       {phase === 'loading' && (
         <div className="text-white/60 text-sm animate-fade-in">
-          <span>Starting Windows{loadingDots}</span>
+          <span>OPENING PORTFOLIO{loadingDots}</span>
         </div>
       )}
 

@@ -48,7 +48,7 @@ export function LoginScreen({ onLogin }: LoginScreenProps) {
         }}
       />
 
-      {/* "Windows XP" branding */}
+      {/* "JMK Portfolio" branding */}
       <div className="absolute top-4 left-6 flex items-center gap-3">
         <svg width="40" height="40" viewBox="0 0 100 100" className="drop-shadow-lg">
           <path d="M5 10 L45 15 L45 45 L5 45 Z" fill="#F25022" />
@@ -57,8 +57,8 @@ export function LoginScreen({ onLogin }: LoginScreenProps) {
           <path d="M50 50 L95 50 L95 90 L50 85 Z" fill="#FFB900" />
         </svg>
         <div>
-          <span className="text-white text-2xl font-light tracking-tight">Windows</span>
-          <span className="text-white text-2xl font-bold italic ml-1">XP</span>
+          <span className="text-white text-2xl font-light tracking-tight">JMK</span>
+          <span className="text-white text-2xl font-bold italic ml-1">Portfolio</span>
         </div>
       </div>
 
@@ -84,8 +84,8 @@ export function LoginScreen({ onLogin }: LoginScreenProps) {
               KJM
             </div>
             <div className="flex-1">
-              <h2 className="text-white font-bold text-lg drop-shadow">Kiseko Joseph</h2>
-              <p className="text-white/80 text-xs">Computer Science Portfolio</p>
+              <h2 className="text-white font-bold text-lg drop-shadow">Joseph Musyoka</h2>
+              <p className="text-white/80 text-xs">Professional Portfolio</p>
             </div>
           </div>
 
