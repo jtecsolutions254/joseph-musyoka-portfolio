@@ -68,7 +68,7 @@ export function Window({
         top: 0,
         left: 0,
         width: '100%',
-        height: 'calc(100% - 48px)',
+        height: 'calc(100% - 30px)',
         zIndex: window.zIndex,
       }
     : {
@@ -82,51 +82,96 @@ export function Window({
   return (
     <div
       ref={windowRef}
-      className="fixed window-glass rounded-lg overflow-hidden animate-window-open flex flex-col"
-      style={style}
+      className="fixed overflow-hidden animate-window-open flex flex-col"
+      style={{
+        ...style,
+        borderRadius: '8px 8px 0 0',
+        border: '1px solid #0054e3',
+        boxShadow: '2px 2px 10px rgba(0,0,0,0.4)',
+      }}
       onClick={onFocus}
     >
-      {/* Title Bar */}
+      {/* XP-style Title Bar */}
       <div
-        className="h-10 bg-card flex items-center justify-between px-4 cursor-move shrink-0"
+        className="h-[30px] flex items-center justify-between px-2 cursor-move shrink-0"
+        style={{
+          background: 'linear-gradient(180deg, #0a5dcc 0%, #0347a7 8%, #0453bf 40%, #0861d4 88%, #0553bf 93%, #003d8c 95%, #002d6a 100%)',
+          borderRadius: '6px 6px 0 0',
+        }}
         onMouseDown={handleMouseDown}
       >
         <div className="flex items-center gap-2">
-          <span className="text-lg">{window.icon}</span>
-          <span className="text-sm font-medium text-foreground/90">{window.title}</span>
+          <span className="text-base">{window.icon}</span>
+          <span className="text-[13px] font-bold text-white drop-shadow-sm">{window.title}</span>
         </div>
 
-        <div className="window-controls flex">
+        <div className="window-controls flex gap-0.5">
+          {/* XP Minimize button */}
           <button
             onClick={onMinimize}
-            className="window-control-minimize"
+            className="w-[21px] h-[21px] flex items-center justify-center rounded-sm transition-all"
+            style={{
+              background: 'linear-gradient(180deg, #3c8dfa 0%, #1c6ae4 50%, #1865dc 51%, #1761d8 100%)',
+              border: '1px solid #0f419b',
+              boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.4)',
+            }}
             title="Minimize"
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = 'linear-gradient(180deg, #5ca7ff 0%, #3c8dfa 50%, #2c7df0 51%, #2679ec 100%)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = 'linear-gradient(180deg, #3c8dfa 0%, #1c6ae4 50%, #1865dc 51%, #1761d8 100%)';
+            }}
           >
-            <Minus className="w-4 h-4" />
+            <Minus className="w-3 h-3 text-white drop-shadow-sm" />
           </button>
+          {/* XP Maximize button */}
           <button
             onClick={onMaximize}
-            className="window-control-maximize"
+            className="w-[21px] h-[21px] flex items-center justify-center rounded-sm transition-all"
+            style={{
+              background: 'linear-gradient(180deg, #3c8dfa 0%, #1c6ae4 50%, #1865dc 51%, #1761d8 100%)',
+              border: '1px solid #0f419b',
+              boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.4)',
+            }}
             title={window.isMaximized ? 'Restore' : 'Maximize'}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = 'linear-gradient(180deg, #5ca7ff 0%, #3c8dfa 50%, #2c7df0 51%, #2679ec 100%)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = 'linear-gradient(180deg, #3c8dfa 0%, #1c6ae4 50%, #1865dc 51%, #1761d8 100%)';
+            }}
           >
             {window.isMaximized ? (
-              <Copy className="w-3.5 h-3.5" />
+              <Copy className="w-2.5 h-2.5 text-white drop-shadow-sm" />
             ) : (
-              <Square className="w-3 h-3" />
+              <Square className="w-2.5 h-2.5 text-white drop-shadow-sm" />
             )}
           </button>
+          {/* XP Close button - Red */}
           <button
             onClick={onClose}
-            className="window-control-close"
+            className="w-[21px] h-[21px] flex items-center justify-center rounded-sm transition-all"
+            style={{
+              background: 'linear-gradient(180deg, #e88a7c 0%, #d65f4b 50%, #c94530 51%, #b53520 100%)',
+              border: '1px solid #8b2518',
+              boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.4)',
+            }}
             title="Close"
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = 'linear-gradient(180deg, #ffaa9c 0%, #e87060 50%, #dc5540 51%, #c84535 100%)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = 'linear-gradient(180deg, #e88a7c 0%, #d65f4b 50%, #c94530 51%, #b53520 100%)';
+            }}
           >
-            <X className="w-4 h-4" />
+            <X className="w-3 h-3 text-white drop-shadow-sm" />
           </button>
         </div>
       </div>
 
       {/* Content */}
-      <div className="flex-1 overflow-auto bg-card p-6">
+      <div className="flex-1 overflow-auto bg-[#ece9d8] p-6">
         {children}
       </div>
     </div>
