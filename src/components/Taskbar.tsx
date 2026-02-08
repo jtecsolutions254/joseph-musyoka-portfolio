@@ -3,6 +3,7 @@ import { Search } from 'lucide-react';
 import { StartMenu } from './StartMenu';
 import { SystemTray } from './SystemTray';
 import { WindowState, WindowId } from '@/types/window';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface TaskbarProps {
   windows: WindowState[];
