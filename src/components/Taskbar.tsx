@@ -94,7 +94,7 @@ export function Taskbar({
             <button
               key={window.id}
               onClick={() => onWindowClick(window.id)}
-              className={`h-[24px] px-2 flex items-center gap-1.5 transition-all duration-100 min-w-[120px] max-w-[160px] text-left`}
+              className={`${isMobile ? 'h-[32px] min-w-[80px] max-w-[100px]' : 'h-[24px] min-w-[120px] max-w-[160px]'} px-2 flex items-center gap-1.5 transition-all duration-100 text-left shrink-0`}
               style={{
                 background: !window.isMinimized
                   ? 'linear-gradient(to bottom, #3a82f7 0%, #2d6ddb 50%, #2c60c5 51%, #2455b5 100%)'
