@@ -159,10 +159,10 @@ export function Window({
               )}
             </button>
           )}
-          {/* XP Close button - Red */}
+          {/* XP Close button - Red - larger on mobile */}
           <button
             onClick={onClose}
-            className="w-[21px] h-[21px] flex items-center justify-center rounded-sm transition-all"
+            className={`${isMobile ? 'w-[32px] h-[32px]' : 'w-[21px] h-[21px]'} flex items-center justify-center rounded-sm transition-all`}
             style={{
               background: 'linear-gradient(180deg, #e88a7c 0%, #d65f4b 50%, #c94530 51%, #b53520 100%)',
               border: '1px solid #8b2518',
