@@ -176,13 +176,13 @@ export function Window({
               e.currentTarget.style.background = 'linear-gradient(180deg, #e88a7c 0%, #d65f4b 50%, #c94530 51%, #b53520 100%)';
             }}
           >
-            <X className="w-3 h-3 text-white drop-shadow-sm" />
+            <X className={`${isMobile ? 'w-4 h-4' : 'w-3 h-3'} text-white drop-shadow-sm`} />
           </button>
         </div>
       </div>
 
-      {/* Content */}
-      <div className="flex-1 overflow-auto bg-[#ece9d8] p-6">
+      {/* Content - with touch-friendly scrolling */}
+      <div className="flex-1 overflow-auto bg-[#ece9d8] p-4 md:p-6 overscroll-contain touch-pan-y">
         {children}
       </div>
     </div>
