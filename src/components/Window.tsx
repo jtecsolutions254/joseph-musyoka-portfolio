@@ -98,16 +98,20 @@ export function Window({
     >
       {/* XP-style Title Bar */}
       <div
-        className="h-[30px] flex items-center justify-between px-2 cursor-move shrink-0"
+        className={`h-[36px] md:h-[30px] flex items-center justify-between px-2 shrink-0 ${!isMobile ? 'cursor-move' : ''}`}
         style={{
           background: 'linear-gradient(180deg, #0a5dcc 0%, #0347a7 8%, #0453bf 40%, #0861d4 88%, #0553bf 93%, #003d8c 95%, #002d6a 100%)',
           borderRadius: '6px 6px 0 0',
         }}
-        onMouseDown={handleMouseDown}
+        onMouseDown={!isMobile ? handleMouseDown : undefined}
+        onTouchStart={(e) => {
+          // Allow touch scrolling within the window
+          e.stopPropagation();
+        }}
       >
-        <div className="flex items-center gap-2">
-          <span className="text-base">{window.icon}</span>
-          <span className="text-[13px] font-bold text-white drop-shadow-sm">{window.title}</span>
+        <div className="flex items-center gap-2 min-w-0 flex-1">
+          <span className="text-base shrink-0">{window.icon}</span>
+          <span className="text-[13px] font-bold text-white drop-shadow-sm truncate">{window.title}</span>
         </div>
 
         <div className="window-controls flex gap-0.5">
