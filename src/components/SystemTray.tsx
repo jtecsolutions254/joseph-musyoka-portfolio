@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { Volume2, VolumeX, Wifi, ChevronUp } from 'lucide-react';
+import { Volume2, VolumeX, Wifi, ChevronUp, Moon, Sun, Shield, Bluetooth, Battery } from 'lucide-react';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface SystemTrayProps {
   isDarkMode: boolean;
