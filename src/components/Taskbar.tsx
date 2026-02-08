@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Search } from 'lucide-react';
+import { useState, useRef, useEffect } from 'react';
+import { Search, X } from 'lucide-react';
 import { StartMenu } from './StartMenu';
 import { SystemTray } from './SystemTray';
 import { WindowState, WindowId } from '@/types/window';
@@ -15,6 +15,19 @@ interface TaskbarProps {
   onToggleMute: () => void;
 }
 
+// All searchable apps for the search feature
+const allApps: { id: WindowId; title: string; keywords: string[] }[] = [
+  { id: 'about', title: 'About Me', keywords: ['about', 'me', 'profile', 'bio'] },
+  { id: 'skills', title: 'Skills', keywords: ['skills', 'abilities', 'tech', 'programming'] },
+  { id: 'projects', title: 'Projects', keywords: ['projects', 'work', 'portfolio', 'demos'] },
+  { id: 'experience', title: 'Experience', keywords: ['experience', 'work', 'jobs', 'career', 'history'] },
+  { id: 'contact', title: 'Contact', keywords: ['contact', 'email', 'message', 'reach'] },
+  { id: 'cv', title: 'Resume', keywords: ['cv', 'resume', 'curriculum', 'vitae', 'pdf'] },
+  { id: 'paint', title: 'Paint', keywords: ['paint', 'draw', 'art', 'creative'] },
+  { id: 'explorer', title: 'File Explorer', keywords: ['files', 'explorer', 'documents', 'folder'] },
+  { id: 'photos', title: 'Photos', keywords: ['photos', 'pictures', 'images', 'gallery'] },
+];
+
 export function Taskbar({ 
   windows, 
   onWindowClick, 
@@ -25,7 +38,31 @@ export function Taskbar({
   onToggleMute 
 }: TaskbarProps) {
   const [isStartOpen, setIsStartOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const searchInputRef = useRef<HTMLInputElement>(null);
   const isMobile = useIsMobile();
+
+  // Focus search input when opened
+  useEffect(() => {
+    if (isSearchOpen && searchInputRef.current) {
+      searchInputRef.current.focus();
+    }
+  }, [isSearchOpen]);
+
+  // Filter apps based on search query
+  const searchResults = searchQuery.trim() 
+    ? allApps.filter(app => 
+        app.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        app.keywords.some(kw => kw.includes(searchQuery.toLowerCase()))
+      )
+    : [];
+
+  const handleSearchSelect = (id: WindowId) => {
+    onOpenWindow(id);
+    setIsSearchOpen(false);
+    setSearchQuery('');
+  };
 
   return (
     <>
@@ -81,10 +118,103 @@ export function Taskbar({
 
           {/* Search - XP style - hidden on mobile */}
           {!isMobile && (
-            <button className="h-6 px-2 flex items-center gap-1 rounded bg-white/10 hover:bg-white/20 transition-colors mx-1">
-              <Search className="w-3 h-3 text-white/80" />
-              <span className="text-xs text-white/80 hidden sm:inline">Search</span>
-            </button>
+            <div className="relative">
+              <button 
+                onClick={() => setIsSearchOpen(!isSearchOpen)}
+                className={`h-6 px-2 flex items-center gap-1 rounded transition-colors mx-1 ${
+                  isSearchOpen ? 'bg-white/30' : 'bg-white/10 hover:bg-white/20'
+                }`}
+              >
+                <Search className="w-3 h-3 text-white/80" />
+                <span className="text-xs text-white/80 hidden sm:inline">Search</span>
+              </button>
+
+              {/* Search Dropdown */}
+              {isSearchOpen && (
+                <div 
+                  className="absolute bottom-full left-0 mb-1 w-[280px] rounded-lg shadow-xl overflow-hidden z-[800]"
+                  style={{
+                    background: 'linear-gradient(180deg, #ece9d8 0%, #d4d0c8 100%)',
+                    border: '2px solid #0054e3',
+                  }}
+                >
+                  {/* Search Header */}
+                  <div 
+                    className="px-3 py-2 flex items-center gap-2"
+                    style={{
+                      background: 'linear-gradient(180deg, #0a5dcc 0%, #0347a7 50%, #003d8c 100%)',
+                    }}
+                  >
+                    <Search className="w-4 h-4 text-white" />
+                    <span className="text-white text-sm font-bold">Search</span>
+                    <button 
+                      onClick={() => {
+                        setIsSearchOpen(false);
+                        setSearchQuery('');
+                      }}
+                      className="ml-auto p-1 hover:bg-white/20 rounded"
+                    >
+                      <X className="w-3 h-3 text-white" />
+                    </button>
+                  </div>
+                  
+                  {/* Search Input */}
+                  <div className="p-2 border-b border-gray-300">
+                    <input
+                      ref={searchInputRef}
+                      type="text"
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      placeholder="Search apps..."
+                      className="w-full px-3 py-1.5 text-sm rounded border border-gray-400 focus:outline-none focus:border-[#316ac5]"
+                      onKeyDown={(e) => {
+                        if (e.key === 'Escape') {
+                          setIsSearchOpen(false);
+                          setSearchQuery('');
+                        }
+                        if (e.key === 'Enter' && searchResults.length > 0) {
+                          handleSearchSelect(searchResults[0].id);
+                        }
+                      }}
+                    />
+                  </div>
+                  
+                  {/* Search Results */}
+                  <div className="max-h-[200px] overflow-y-auto">
+                    {searchQuery.trim() === '' ? (
+                      <div className="p-3 text-center text-gray-500 text-sm">
+                        Type to search apps...
+                      </div>
+                    ) : searchResults.length === 0 ? (
+                      <div className="p-3 text-center text-gray-500 text-sm">
+                        No apps found
+                      </div>
+                    ) : (
+                      searchResults.map((app) => (
+                        <button
+                          key={app.id}
+                          onClick={() => handleSearchSelect(app.id)}
+                          className="w-full flex items-center gap-3 px-3 py-2 text-left hover:bg-[#316ac5] hover:text-white transition-colors text-gray-800"
+                        >
+                          <span className="text-lg">
+                            {app.id === 'about' && '👤'}
+                            {app.id === 'skills' && '⚡'}
+                            {app.id === 'projects' && '📁'}
+                            {app.id === 'experience' && '💼'}
+                            {app.id === 'contact' && '📧'}
+                            {app.id === 'cv' && '📄'}
+                            {app.id === 'paint' && '🎨'}
+                            {app.id === 'explorer' && '📂'}
+                            {app.id === 'photos' && '🖼️'}
+                          </span>
+                          <span className="text-sm">{app.title}</span>
+                        </button>
+                      ))
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
           )}
         </div>
 

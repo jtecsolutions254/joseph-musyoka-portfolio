@@ -81,13 +81,21 @@ export default function Index() {
     if (!isMuted) playClickSound();
     const window = windows.find(w => w.id === id);
     if (window?.isMinimized) {
-      // Unminimize and focus
-      focusWindow(id);
-      minimizeWindow(id);
+      // Unminimize and focus - call openWindow which handles unminimizing
+      openWindow(id as WindowId);
     } else {
-      focusWindow(id);
+      // Toggle minimize if already focused at top, otherwise focus
+      const topWindow = windows.reduce((top, w) => 
+        !w.isMinimized && w.zIndex > (top?.zIndex ?? 0) ? w : top, 
+        null as typeof windows[0] | null
+      );
+      if (topWindow?.id === id) {
+        minimizeWindow(id);
+      } else {
+        focusWindow(id);
+      }
     }
-  }, [windows, focusWindow, minimizeWindow, playClickSound, isMuted]);
+  }, [windows, openWindow, focusWindow, minimizeWindow, playClickSound, isMuted]);
 
   const toggleTheme = useCallback(() => {
     setIsDarkMode(prev => {
