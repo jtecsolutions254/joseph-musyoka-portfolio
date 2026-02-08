@@ -27,17 +27,28 @@ export function DesktopIcon({ id, title, icon, onClick, onDoubleClick }: Desktop
 
   return (
     <button
-      className={`desktop-icon w-20 text-center focus:outline-none ${
-        isSelected ? 'bg-primary/20 ring-1 ring-primary/40' : ''
+      className={`w-20 flex flex-col items-center gap-1 p-2 rounded focus:outline-none transition-all ${
+        isSelected 
+          ? 'bg-[#316ac5]/60 ring-1 ring-[#316ac5] ring-offset-0' 
+          : 'hover:bg-white/20'
       }`}
       onClick={handleClick}
       onDoubleClick={handleDoubleClick}
       onBlur={handleBlur}
     >
-      <div className="text-4xl mb-1 drop-shadow-md transition-transform hover:scale-110">
+      <div className="transition-transform hover:scale-105">
         {icon}
       </div>
-      <span className="text-xs font-medium text-foreground/90 leading-tight line-clamp-2 drop-shadow-sm">
+      <span 
+        className={`text-[11px] font-normal leading-tight text-center line-clamp-2 px-0.5 ${
+          isSelected 
+            ? 'bg-[#316ac5] text-white' 
+            : 'text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]'
+        }`}
+        style={{ 
+          textShadow: isSelected ? 'none' : '1px 1px 2px rgba(0,0,0,0.9), -1px -1px 2px rgba(0,0,0,0.5)'
+        }}
+      >
         {title}
       </span>
     </button>
