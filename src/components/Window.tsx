@@ -65,12 +65,15 @@ export function Window({
 
   if (window.isMinimized) return null;
 
-  const style = window.isMaximized
+  // Mobile: always maximize windows for better usability
+  const isEffectivelyMaximized = isMobile || window.isMaximized;
+
+  const style = isEffectivelyMaximized
     ? {
         top: 0,
         left: 0,
         width: '100%',
-        height: 'calc(100% - 30px)',
+        height: 'calc(100% - 40px)', // Slightly taller taskbar area for touch
         zIndex: window.zIndex,
       }
     : {
