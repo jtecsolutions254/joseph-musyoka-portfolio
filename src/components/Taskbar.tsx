@@ -49,10 +49,10 @@ export function Taskbar({
       >
         {/* Left section - Start button */}
         <div className="flex items-center">
-          {/* XP Start Button */}
+          {/* XP Start Button - larger on mobile */}
           <button
             onClick={() => setIsStartOpen(!isStartOpen)}
-            className={`h-[30px] px-3 flex items-center gap-2 transition-all duration-100 rounded-r-xl ${
+            className={`${isMobile ? 'h-[40px] px-2' : 'h-[30px] px-3'} flex items-center gap-2 transition-all duration-100 rounded-r-xl ${
               isStartOpen 
                 ? 'bg-[#2a5298]' 
                 : 'hover:brightness-110'
