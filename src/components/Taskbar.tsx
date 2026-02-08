@@ -15,6 +15,19 @@ interface TaskbarProps {
   onToggleMute: () => void;
 }
 
+// All searchable apps for the search feature
+const allApps: { id: WindowId; title: string; keywords: string[] }[] = [
+  { id: 'about', title: 'About Me', keywords: ['about', 'me', 'profile', 'bio'] },
+  { id: 'skills', title: 'Skills', keywords: ['skills', 'abilities', 'tech', 'programming'] },
+  { id: 'projects', title: 'Projects', keywords: ['projects', 'work', 'portfolio', 'demos'] },
+  { id: 'experience', title: 'Experience', keywords: ['experience', 'work', 'jobs', 'career', 'history'] },
+  { id: 'contact', title: 'Contact', keywords: ['contact', 'email', 'message', 'reach'] },
+  { id: 'cv', title: 'Resume', keywords: ['cv', 'resume', 'curriculum', 'vitae', 'pdf'] },
+  { id: 'paint', title: 'Paint', keywords: ['paint', 'draw', 'art', 'creative'] },
+  { id: 'explorer', title: 'File Explorer', keywords: ['files', 'explorer', 'documents', 'folder'] },
+  { id: 'photos', title: 'Photos', keywords: ['photos', 'pictures', 'images', 'gallery'] },
+];
+
 export function Taskbar({ 
   windows, 
   onWindowClick, 
@@ -25,7 +38,31 @@ export function Taskbar({
   onToggleMute 
 }: TaskbarProps) {
   const [isStartOpen, setIsStartOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const searchInputRef = useRef<HTMLInputElement>(null);
   const isMobile = useIsMobile();
+
+  // Focus search input when opened
+  useEffect(() => {
+    if (isSearchOpen && searchInputRef.current) {
+      searchInputRef.current.focus();
+    }
+  }, [isSearchOpen]);
+
+  // Filter apps based on search query
+  const searchResults = searchQuery.trim() 
+    ? allApps.filter(app => 
+        app.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        app.keywords.some(kw => kw.includes(searchQuery.toLowerCase()))
+      )
+    : [];
+
+  const handleSearchSelect = (id: WindowId) => {
+    onOpenWindow(id);
+    setIsSearchOpen(false);
+    setSearchQuery('');
+  };
 
   return (
     <>
