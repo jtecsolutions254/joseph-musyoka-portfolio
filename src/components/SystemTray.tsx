@@ -12,6 +12,8 @@ interface SystemTrayProps {
 export function SystemTray({ isDarkMode, onToggleTheme, isMuted, onToggleMute }: SystemTrayProps) {
   const [currentTime, setCurrentTime] = useState(new Date());
   const [showTray, setShowTray] = useState(false);
+  const [showQuickSettings, setShowQuickSettings] = useState(false);
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -19,6 +21,14 @@ export function SystemTray({ isDarkMode, onToggleTheme, isMuted, onToggleMute }:
     }, 1000);
     return () => clearInterval(timer);
   }, []);
+
+  // Close quick settings when clicking outside
+  useEffect(() => {
+    if (!showQuickSettings) return;
+    const handleClick = () => setShowQuickSettings(false);
+    document.addEventListener('click', handleClick);
+    return () => document.removeEventListener('click', handleClick);
+  }, [showQuickSettings]);
 
   const formatTime = (date: Date) => {
     return date.toLocaleTimeString('en-US', {
