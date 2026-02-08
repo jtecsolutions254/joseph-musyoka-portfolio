@@ -6,65 +6,125 @@ interface BootScreenProps {
 
 export function BootScreen({ onComplete }: BootScreenProps) {
   const [progress, setProgress] = useState(0);
-  const [showLogo, setShowLogo] = useState(true);
+  const [phase, setPhase] = useState<'logo' | 'loading' | 'fadeout'>('logo');
+  const [loadingDots, setLoadingDots] = useState('');
 
+  // Loading dots animation
   useEffect(() => {
+    const dotsInterval = setInterval(() => {
+      setLoadingDots((prev) => (prev.length >= 3 ? '' : prev + '.'));
+    }, 500);
+    return () => clearInterval(dotsInterval);
+  }, []);
+
+  // Progress bar
+  useEffect(() => {
+    if (phase !== 'loading') return;
+    
     const progressInterval = setInterval(() => {
       setProgress((prev) => {
         if (prev >= 100) {
           clearInterval(progressInterval);
           return 100;
         }
-        return prev + Math.random() * 15 + 5;
+        // Variable speed for realism
+        const increment = prev < 30 ? Math.random() * 15 + 8 :
+                         prev < 70 ? Math.random() * 10 + 3 :
+                         Math.random() * 5 + 2;
+        return Math.min(prev + increment, 100);
       });
-    }, 200);
+    }, 150);
 
     return () => clearInterval(progressInterval);
+  }, [phase]);
+
+  // Phase transitions
+  useEffect(() => {
+    // Start with logo, then transition to loading
+    const logoTimer = setTimeout(() => {
+      setPhase('loading');
+    }, 1500);
+
+    return () => clearTimeout(logoTimer);
   }, []);
 
   useEffect(() => {
-    if (progress >= 100) {
+    if (progress >= 100 && phase === 'loading') {
       setTimeout(() => {
-        setShowLogo(false);
-        setTimeout(onComplete, 500);
+        setPhase('fadeout');
+        setTimeout(onComplete, 800);
       }, 500);
     }
-  }, [progress, onComplete]);
+  }, [progress, phase, onComplete]);
 
   return (
     <div 
-      className={`fixed inset-0 bg-gradient-to-b from-[#0078D4] to-[#005a9e] flex flex-col items-center justify-center z-[9999] transition-opacity duration-500 ${
-        !showLogo ? 'opacity-0' : 'opacity-100'
+      className={`fixed inset-0 bg-black flex flex-col items-center justify-center z-[9999] transition-opacity duration-800 ${
+        phase === 'fadeout' ? 'opacity-0' : 'opacity-100'
       }`}
     >
-      {/* Windows-style loading spinner */}
-      <div className="relative w-20 h-20 mb-12">
-        <div className="absolute inset-0 rounded-full border-4 border-primary-foreground/20" />
-        <div 
-          className="absolute inset-0 rounded-full border-4 border-transparent border-t-primary-foreground animate-boot-spin"
-          style={{ animationDuration: '1.2s' }}
-        />
+      {/* Windows-style logo */}
+      <div className={`transition-all duration-700 ${phase === 'logo' ? 'scale-100 opacity-100' : 'scale-95 opacity-80'}`}>
+        {/* Animated Windows logo */}
+        <div className="relative w-24 h-24 mb-8">
+          <div className="absolute inset-0 grid grid-cols-2 gap-1.5">
+            <div 
+              className="bg-[#F25022] rounded-sm animate-pulse" 
+              style={{ animationDelay: '0ms' }}
+            />
+            <div 
+              className="bg-[#7FBA00] rounded-sm animate-pulse" 
+              style={{ animationDelay: '100ms' }}
+            />
+            <div 
+              className="bg-[#00A4EF] rounded-sm animate-pulse" 
+              style={{ animationDelay: '200ms' }}
+            />
+            <div 
+              className="bg-[#FFB900] rounded-sm animate-pulse" 
+              style={{ animationDelay: '300ms' }}
+            />
+          </div>
+        </div>
       </div>
 
-      {/* Name and title */}
-      <h1 className="text-4xl md:text-5xl font-light text-primary-foreground mb-2 tracking-wide">
-        Kiseko Joseph Musyoka
-      </h1>
-      <p className="text-lg text-primary-foreground/80 mb-8 font-light">
-        Computer Science Portfolio
-      </p>
+      {/* Loading indicator */}
+      {phase === 'loading' && (
+        <div className="animate-fade-in">
+          {/* Circular spinner */}
+          <div className="relative w-12 h-12 mb-8">
+            <div className="absolute inset-0 rounded-full border-2 border-white/10" />
+            <div 
+              className="absolute inset-0 rounded-full border-2 border-transparent border-t-white animate-boot-spin"
+              style={{ animationDuration: '1s' }}
+            />
+          </div>
+        </div>
+      )}
 
-      {/* Loading bar */}
-      <div className="w-64 h-1 bg-primary-foreground/20 rounded-full overflow-hidden">
-        <div 
-          className="h-full bg-primary-foreground transition-all duration-300 ease-out rounded-full"
-          style={{ width: `${Math.min(progress, 100)}%` }}
-        />
+      {/* Loading text with dots */}
+      {phase === 'loading' && (
+        <div className="text-white/60 text-sm animate-fade-in">
+          <span>Loading{loadingDots}</span>
+        </div>
+      )}
+
+      {/* Progress indicator - subtle bottom bar */}
+      {phase === 'loading' && (
+        <div className="absolute bottom-20 w-48">
+          <div className="h-0.5 bg-white/10 rounded-full overflow-hidden">
+            <div 
+              className="h-full bg-white/50 transition-all duration-200 rounded-full"
+              style={{ width: `${Math.min(progress, 100)}%` }}
+            />
+          </div>
+        </div>
+      )}
+
+      {/* Branding */}
+      <div className="absolute bottom-8 text-center text-white/30 text-xs">
+        <p>KJM Portfolio OS</p>
       </div>
-
-      <p className="mt-4 text-primary-foreground/60 text-sm">
-        Loading portfolio...
-      </p>
     </div>
   );
 }
